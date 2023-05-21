@@ -1,58 +1,29 @@
-
-/* body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-  }
-  
-  h2 {
-    margin-top: 30px;
-    font-size: 24px;
-  }
-  
-  section {
-    margin-top: 30px;
-  }
-  
-  span {
-    margin-right: 10px;
-  }
-  
-  #timer {
-    font-weight: bold;
-  }
-  
-  #wins, #losses {
-    font-weight: bold;
-  } */
-  
-
-  body {
+body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     text-align: center;
-    height: 100vh;
   }
   
   header {
     font-size: 36px;
-    margin-bottom: 0;
+    width: 100%;
+    margin: 0;
+    padding: 20px;
     background-color: rgb(76, 17, 123);
+    color: #fff;
+  }
+  
+  section {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
   }
   
   button {
@@ -69,12 +40,10 @@
     font-size: 24px;
   }
   
-  section {
-    margin-top: 30px;
-  }
-  
   span {
     margin-right: 10px;
+    margin-top: auto;
+    margin-bottom: auto;
   }
   
   #timer {
@@ -85,4 +54,8 @@
   #losses {
     font-weight: bold;
   }
+  
+  
+  
+
   
