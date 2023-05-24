@@ -6,7 +6,7 @@ var winsEl = document.getElementById("wins");
 var lossesEl = document.getElementById("losses");
 var count = 60;
 var wins = parseInt(localStorage.getItem("wins")) || 0;
-var losses = 0;
+var losses = parseInt(localStorage.getItem("losses")) || 0;
 var gameTimer;
 var correctAnswer;
 
@@ -14,101 +14,76 @@ var questionIndex = 0;
 
 var questionsList = [
   {
-    question: "Inside what HTML element do we  the JavaScript?",
-    answers: ["Paris", "London", "Berlin", "Rome"],
-    correctAnswer: "Paris",
+    question: "Inside what HTML element do we include the JavaScript?",
+    answers: ["<script>", "<js>", "<javascripting>", "<.script>"],
+    correctAnswer: "<script>",
   },
   {
-    question: "Which planet is known as the Red Planet?",
-    answers: ["Mars", "Venus", "Jupiter", "Saturn"],
-    correctAnswer: "Mars",
+    question: "What is CSS used for?",
+    answers: ["inserting logic", "styling", "encryption", "cooking"],
+    correctAnswer: "styling",
   },
   {
-    question: "Who painted the Mona Lisa?",
-    answers: ["Leonardo da Vinci", "Vincent van Gogh", "Pablo Picasso", "Michelangelo"],
-    correctAnswer: "Leonardo da Vinci",
+    question: "How do you comment out a line in JavaScript?",
+    answers: ["<!-->", "/*", "//", "F4"],
+    correctAnswer: "//",
   },
 ];
 
 function clockTick() {
-    // update time
-    count--;
-    timer.textContent = count;
-  
-    // check if user ran out of time
-    if (count <= 0) {
-     // quizEnd();
-    }
+  // update time
+  count--;
+  timer.textContent = count;
+
+  // check if user ran out of time
+  if (count <= 0) {
+    // quizEnd();
   }
-  
-  // start timer
-//   var timerId = setInterval(clockTick, 1000);
+}
 
 function displayQuestion() {
-   var currentQuestion = questionsList[questionIndex]
-   h2El.textContent = currentQuestion.question;
+  var currentQuestion = questionsList[questionIndex];
+  h2El.textContent = currentQuestion.question;
 
-    var currentAnswers = currentQuestion.answers;
-    quiz.innerHTML="";
+  var currentAnswers = currentQuestion.answers;
+  quiz.innerHTML = "";
 
   for (var i = 0; i < currentAnswers.length; i++) {
     var answerOption = document.createElement("button");
-    var choice = currentAnswers[i]
+    var choice = currentAnswers[i];
     answerOption.textContent = choice;
     answerOption.classList.add("answer-option");
-    answerOption.setAttribute("value", choice)
+    answerOption.setAttribute("value", choice);
     quiz.appendChild(answerOption);
   }
+  correctAnswer = currentQuestion.correctAnswer;
 }
 
 function questionClick(event) {
-    var buttonEl = event.target;
-    console.log("button-value", buttonEl.value);
-    var userAnswer = buttonEl.value
-    if (userAnswer !== questionsList[questionIndex].correctAnswer) {
-        count = count - 15;
-    }
-    questionIndex = questionIndex + 1;
+  var buttonEl = event.target;
+  console.log("button-value", buttonEl.value);
+  var userAnswer = buttonEl.value;
+  if (userAnswer !== questionsList[questionIndex].correctAnswer) {
+    count = count - 15;
+  }
+  questionIndex = questionIndex + 1;
+
+  if (questionIndex === questionsList.length) {
+    displayResult();
+  } else {
     displayQuestion();
+  }
 }
 
-quiz.addEventListener("click", questionClick)
-
-startBtn.addEventListener("click", function(e) {
-  startGame();
-});
+quiz.addEventListener("click", questionClick);
 
 function startGame() {
-  
   displayQuestion();
-
-  gameTimer = setInterval(clockTick, 1000)
-
-//   startBtn.disabled = true;
-//   count = 30;
-//   timer.textContent = "timer: " + count;
-//   lossesEl.textContent = losses;
-//   winsEl.textContent = wins;
-//   gameTimer = setInterval(function() {
-//     count--;
-//     timer.textContent = "timer: " + (count > 0 ? count : 0);
-
-//     if (count <= 0) {
-//       clearInterval(gameTimer);
-//       h2El.textContent = "Game Over";
-//       losses++;
-//       lossesEl.textContent = losses;
-//       localStorage.setItem("wins", wins);
-//       startBtn.disabled = false;
-//     }
-//   }, 1000);
+  gameTimer = setInterval(clockTick, 1000);
+  startBtn.disabled = true;
 }
 
-function getRandomQuestion() {
-  return questionsList[Math.floor(Math.random() * questionsList.length)];
-}
-
-
+startBtn.addEventListener("click", startGame);
 
 function checkAnswer(selectedAnswer) {
   clearInterval(gameTimer);
@@ -122,113 +97,191 @@ function checkAnswer(selectedAnswer) {
     h2El.textContent = "Wrong!";
     losses++;
     lossesEl.textContent = losses;
+    localStorage.setItem("losses", losses);
   }
 
   startBtn.disabled = false;
+
+  if (questionIndex === questionsList.length) {
+    displayResult();
+  } else {
+    displayQuestion();
+  }
 }
 
-document.addEventListener("keydown", function(e) {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    var selectedAnswer = document.querySelector(".answer-option.selected").textContent;
-    checkAnswer(selectedAnswer);
-  }
-});
+function displayResult() {
+  clearInterval(gameTimer);  
+  timer.classList.add("hidden");
+  
+  h2El.classList.add("hidden");  
+  quiz.innerHTML = "";
+  var resultEl = document.createElement("div");
+  resultEl.textContent = "Congratulations! Your score is: " + wins;
+  resultEl.style.fontSize = "24px";
+  resultEl.style.fontWeight = "bold";
+  resultEl.style.marginTop = "30";
+  quiz.appendChild(resultEl);
+  quiz.appendChild(startBtn);
 
-document.addEventListener("click", function(e) {
-  if (e.target.classList.contains("answer-option")) {
-    var answerOptions = document.querySelectorAll(".answer-option");
-    answerOptions.forEach(function(option) {
-      option.classList.remove("selected");
-    });
-    e.target.classList.add("selected");
-  }
-});
+}
+
+
 
 
 
 
 // var startBtn = document.getElementById("start");
 // var timer = document.getElementById("timer");
+// var quiz = document.getElementById("quiz");
 // var h2El = document.getElementById("word");
-// var winsEl = document.getElementById("wins")
-// var lossesEl = document.getElementById("losses")
-// var count = 30;
-// var wordsList = ["javascript", "objects", "arrays"];
-// var randWordArr;
-// var randWord;
-// var _Arr = [];
+// var winsEl = document.getElementById("wins");
+// var lossesEl = document.getElementById("losses");
+// var count = 60;
 // var wins = parseInt(localStorage.getItem("wins")) || 0;
-// var losses = 0;
+// var losses = parseInt(localStorage.getItem("losses")) || 0;
 // var gameTimer;
+// var correctAnswer;
 
-// startBtn.addEventListener("click", function(e) {
+// var questionIndex = 0;
+
+// var questionsList = [
+//   {
+//     question: "Inside what HTML element do we include the JavaScript?",
+//     answers: ["<script>", "<js>", "<javascripting>", "<.script>"],
+//     correctAnswer: "<script>",
+//   },
+//   {
+//     question: "What is CSS used for?",
+//     answers: ["inserting logic", "styling", "encryption", "cooking"],
+//     correctAnswer: "styling",
+//   },
+//   {
+//     question: "How do you comment out a line in JavaScript?",
+//     answers: ["<!-->", "/*", "//", "F4"],
+//     correctAnswer: "//",
+//   },
+// ];
+
+// function clockTick() {
+//   // update time
+//   count--;
+//   timer.textContent = count;
+
+//   // check if user ran out of time
+//   if (count <= 0) {
+//     // quizEnd();
+//   }
+// }
+
+// function displayQuestion() {
+//   var currentQuestion = questionsList[questionIndex];
+//   h2El.textContent = currentQuestion.question;
+
+//   var currentAnswers = currentQuestion.answers;
+//   quiz.innerHTML = "";
+
+//   for (var i = 0; i < currentAnswers.length; i++) {
+//     var answerOption = document.createElement("button");
+//     var choice = currentAnswers[i];
+//     answerOption.textContent = choice;
+//     answerOption.classList.add("answer-option");
+//     answerOption.setAttribute("value", choice);
+//     quiz.appendChild(answerOption);
+//   }
+//   correctAnswer = currentQuestion.correctAnswer;
+// }
+
+// function questionClick(event) {
+//   var buttonEl = event.target;
+//   console.log("button-value", buttonEl.value);
+//   var userAnswer = buttonEl.value;
+//   if (userAnswer !== questionsList[questionIndex].correctAnswer) {
+//     count = count - 15;
+//   }
+//   questionIndex = questionIndex + 1;
+//   displayQuestion();
+// }
+
+// quiz.addEventListener("click", questionClick);
+
+// startBtn.addEventListener("click", function (e) {
 //   startGame();
 // });
 
 // function startGame() {
-//   randomWord();
+//   displayQuestion();
+//   gameTimer = setInterval(clockTick, 1000);
 //   startBtn.disabled = true;
-//   count = 30;
-//   timer.textContent = "timer: " + count;
-//   lossesEl.textContent = losses;
-//   winsEl.textContent = wins;
-//   gameTimer = setInterval(function() {
-//     count--;
-//     timer.textContent = "timer: " + (count > 0 ? count : 0);
-
-//     if (count <= 0) {
-//       clearInterval(gameTimer);
-//       h2El.textContent = "Game Over";
-//       losses++;
-//       lossesEl.textContent = losses;
-//       localStorage.setItem("wins", wins);
-//       startBtn.disabled = false;
-//     }
-//   }, 1000);
 // }
 
-// function randomWord() {
-//   randWord = wordsList[Math.floor(Math.random() * wordsList.length)];
-//   randWordArr = randWord.split("");
-//   _Arr = Array(randWordArr.length).fill("_");
-//   h2El.textContent = _Arr.join(" ");
-// }
+// function checkAnswer(selectedAnswer) {
+//   clearInterval(gameTimer);
 
-// document.addEventListener("keyup", function(e) {
-//   for (let i = 0; i < randWordArr.length; i++) {
-//     if (e.key === randWordArr[i]) {
-//       _Arr[i] = e.key;
-//     }
-//   }
-//   h2El.textContent = _Arr.join(" ");
-
-//   if (_Arr.join("") === randWord) {
-//     clearInterval(gameTimer);
-//     h2El.textContent = "You Win!";
+//   if (selectedAnswer === correctAnswer) {
+//     h2El.textContent = "Correct!";
 //     wins++;
 //     winsEl.textContent = wins;
 //     localStorage.setItem("wins", wins);
-//     startBtn.disabled = false;
+//   } else {
+//     h2El.textContent = "Wrong!";
+//     losses++;
+//     lossesEl.textContent = losses;
+//     localStorage.setItem("losses", losses);
+//   }
+
+//   startBtn.disabled = false;
+
+//   if (questionIndex === questionsList.length - 1) {
+//     displayResult();
+//   } else {
+//     questionIndex++;
+//     displayQuestion();
+//   }
+// }
+
+
+
+// function displayResult() {
+//     quiz.innerHTML = "";
+//     var resultEl = document.createElement("div");
+//     resultEl.textContent = "Congratulations! Your score is: " + wins;
+//     resultEl.style.fontSize = "24px";
+//     resultEl.style.fontWeight = "bold";
+//     resultEl.style.marginTop = "30px";
+//     quiz.appendChild(resultEl);
+//     quiz.appendChild(startBtn);
+//   }
+
+// document.addEventListener("keydown", function (e) {
+//   if (e.key === "Enter") {
+//     e.preventDefault();
+//     var selectedAnswer = document.querySelector(".answer-option.selected").textContent;
+//     checkAnswer(selectedAnswer);
 //   }
 // });
 
-// document.addEventListener("keydown", function(e) {
-//   if (e.key === "Enter") {
-//     e.preventDefault();
-//     if (_Arr.join("") === randWord) {
-//       clearInterval(gameTimer);
-//       h2El.textContent = "You Win!";
-//       wins++;
-//       winsEl.textContent = wins;
-//       localStorage.setItem("wins", wins);
-//       startBtn.disabled = false;
-//     } else {
-//       losses++;
-//       lossesEl.textContent = losses;
-//     }
-//   }
-// });
+// document.addEventListener("click", function (e) {
+//   if (e.target.classList.contains("answer-option")) {
+//     var answerOptions = document.querySelectorAll(".answer-option");
+//     answerOptions.forEach(function (option) {
+//       option.classList.remove("selected");
+//     });
+//     e.target.classList.add("selected");function displayResult() {
+//   quiz.innerHTML = "";
+//   var resultEl = document.createElement("div");
+//   resultEl.textContent = "Congratulations! Your score is: " + wins;
+//   quiz.appendChild(resultEl);
+// }
+ 
+// }})
+
+
+
+
+
+
+
+
 
 
 
