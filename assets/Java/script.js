@@ -14,7 +14,7 @@ var questionIndex = 0;
 
 var questionsList = [
   {
-    question: "What is the capital of France?",
+    question: "Inside what HTML element do we  the JavaScript?",
     answers: ["Paris", "London", "Berlin", "Rome"],
     correctAnswer: "Paris",
   },
@@ -42,7 +42,7 @@ function clockTick() {
   }
   
   // start timer
-  var timerId = setInterval(clockTick, 1000);
+//   var timerId = setInterval(clockTick, 1000);
 
 function displayQuestion() {
    var currentQuestion = questionsList[questionIndex]
@@ -81,6 +81,8 @@ startBtn.addEventListener("click", function(e) {
 function startGame() {
   
   displayQuestion();
+
+  gameTimer = setInterval(clockTick, 1000)
 
 //   startBtn.disabled = true;
 //   count = 30;
