@@ -37,7 +37,17 @@ function clockTick() {
 
   // check if user ran out of time
   if (count <= 0) {
-    // quizEnd();
+    clearInterval(gameTimer); 
+    timer.classList.add("hidden"); 
+    h2El.classList.add("hidden"); 
+    quiz.innerHTML = "";
+    var gameOverEl = document.createElement("div");
+    gameOverEl.textContent = "Game Over";
+    gameOverEl.style.fontSize = "24px";
+    gameOverEl.style.fontWeight = "bold";
+    gameOverEl.style.marginTop = "30px";
+    quiz.appendChild(gameOverEl);
+    quiz.appendChild(startBtn);
   }
 }
 
@@ -112,7 +122,7 @@ function checkAnswer(selectedAnswer) {
 function displayResult() {
   clearInterval(gameTimer);  
   timer.classList.add("hidden");
-  
+
   h2El.classList.add("hidden");  
   quiz.innerHTML = "";
   var resultEl = document.createElement("div");
